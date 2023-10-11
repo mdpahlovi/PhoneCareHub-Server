@@ -37,7 +37,7 @@ const signinUser = async (payload: SigninUserPayload) => {
 
 const socialSignin = async (payload: SocialSignin) => {
     let auth = await prisma.auth.findUnique({ where: { email: payload.email } });
-    if (!auth) auth = await prisma.auth.create({ data: { ...payload, user: { create: {} } } });
+    if (!auth) auth = await prisma.auth.create({ data: { ...payload } });
 
     const result = exclude(auth, ["provider", "created_at"]);
     return result;
