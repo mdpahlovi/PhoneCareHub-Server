@@ -2,64 +2,41 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import { ServiceService } from "./review.service";
+import { ReviewService } from "./review.service";
 
-const createService = catchAsync(async (req: Request, res: Response) => {
-    const result = await ServiceService.createService(req.body);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Service Created Successfully...!",
-        data: result,
-    });
-});
-
-const getAllService = catchAsync(async (req: Request, res: Response) => {
-    const result = await ServiceService.getAllService();
+const createReview = catchAsync(async (req: Request, res: Response) => {
+    const result = await ReviewService.createReview(req.body);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "Service Retrieves Successfully...!",
+        message: "Review Created Successfully...!",
         data: result,
     });
 });
 
-const getSingleService = catchAsync(async (req: Request, res: Response) => {
+const updateReview = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await ServiceService.getSingleService(id);
+    const result = await ReviewService.updateReview(req.body, id);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "Service Retrieve Successfully...!",
+        message: "Review Updated Successfully...!",
         data: result,
     });
 });
 
-const updateService = catchAsync(async (req: Request, res: Response) => {
+const deleteReview = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
-    const result = await ServiceService.updateService(req.body, id);
+    const result = await ReviewService.deleteReview(id);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "Service Updated Successfully...!",
+        message: "Review Deleted Successfully...!",
         data: result,
     });
 });
 
-const deleteService = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await ServiceService.deleteService(id);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Service Deleted Successfully...!",
-        data: result,
-    });
-});
-
-export const ServiceController = { createService, getAllService, getSingleService, updateService, deleteService };
+export const ReviewController = { createReview, updateReview, deleteReview };

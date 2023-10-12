@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const createBooking = z.object({
     body: z.object({
+        serviceId: z.string({ required_error: "Service Id is Required" }),
         deviceimage: z.string({ required_error: "Device Image is Required" }),
         devicename: z.string({ required_error: "Device Name is Required" }),
         problem: z.string({ required_error: "Device Problem is Required" }),
@@ -12,6 +13,7 @@ const createBooking = z.object({
 
 const updateBooking = z.object({
     body: z.object({
+        serviceId: z.string().optional(),
         deviceimage: z.string().optional(),
         devicename: z.string().optional(),
         problem: z.string().optional(),

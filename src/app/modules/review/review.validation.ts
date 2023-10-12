@@ -1,21 +1,19 @@
 import { z } from "zod";
 
-const createService = z.object({
+const createReview = z.object({
     body: z.object({
-        name: z.string({ required_error: "Service Name is Required" }),
-        image: z.string({ required_error: "Service Image is Required" }),
-        description: z.string({ required_error: "Service Description is Required" }),
-        estimatetime: z.number({ required_error: "Service Estimate Time is Required" }),
+        serviceId: z.string({ required_error: "Service Id is Required" }),
+        rating: z.string({ required_error: "Review Image is Required" }),
+        comment: z.string({ required_error: "Review Description is Required" }),
     }),
 });
 
-const updateService = z.object({
+const updateReview = z.object({
     body: z.object({
-        name: z.string().optional(),
-        image: z.string().optional(),
-        description: z.string().optional(),
-        estimatetime: z.number().optional(),
+        serviceId: z.string({ required_error: "Service Id is Required" }),
+        rating: z.string().optional(),
+        comment: z.string().optional(),
     }),
 });
 
-export const ServiceValidation = { createService, updateService };
+export const ReviewValidation = { createReview, updateReview };
