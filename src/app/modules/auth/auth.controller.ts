@@ -10,7 +10,7 @@ const signupUser = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "User created successfully...!",
+        message: "User Created Successfully...!",
         data: result,
     });
 });
@@ -21,7 +21,7 @@ const signinUser = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "User signin successfully...!",
+        message: "User Signin Successfully...!",
         data: result,
     });
 });
@@ -32,7 +32,7 @@ const socialSignin = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "User signin successfully...!",
+        message: "User Signin Successfully...!",
         data: result,
     });
 });
