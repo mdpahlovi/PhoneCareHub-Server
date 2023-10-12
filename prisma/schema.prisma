@@ -7,48 +7,45 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Auth {
-    id         String   @id @default(uuid())
-    name       String
-    image      String   @default("https://shorturl.at/jnruF")
-    email      String   @unique
-    role       Role     @default(user)
-    password   String?
-    provider   Provider @default(credentials)
-    user       User?
-    admin      Admin?
-    created_at DateTime @default(now())
-
-    @@map("auths")
-}
-
 model User {
-    id        String    @unique
-    auth      Auth      @relation(fields: [id], references: [id])
+    id        String    @id @default(uuid())
+    name      String
+    role      Role      @default(user)
+    image     String    @default("https://shorturl.at/jnruF")
+    email     String    @unique
+    password  String?
     phone     String?
     address   String?
     birthdate DateTime?
     gender    Gender?
+    provider  Provider  @default(credentials)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
 
-    @@id([id])
     @@map("users")
 }
 
 model Admin {
-    id        String    @unique
-    auth      Auth      @relation(fields: [id], references: [id])
+    id        String    @id @default(uuid())
+    name      String
+    role      Role      @default(admin)
+    type      AdminType
+    image     String    @default("https://shorturl.at/jnruF")
+    email     String    @unique
+    password  String?
     phone     String?
-    address   String?
-    birthdate DateTime?
-    gender    Gender?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
 
-    @@id([id])
     @@map("admins")
 }
 
 enum Role {
     user
     admin
+}
+
+enum AdminType {
     superadmin
 }
 
