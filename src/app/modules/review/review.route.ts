@@ -1,7 +1,7 @@
 import express from "express";
 import validateRequest from "../../middlewares/validateRequest";
-import { ServiceController } from "./service.controller";
-import { ServiceValidation } from "./service.validation";
+import { ServiceController } from "./review.controller";
+import { ServiceValidation } from "./review.validation";
 
 const router = express.Router();
 
@@ -15,4 +15,4 @@ router.patch("/:id", validateRequest(ServiceValidation.updateService), ServiceCo
 
 router.delete("/:id", ServiceController.deleteService);
 
-export const AuthRoutes = router;
+export const ServiceRoutes = router;

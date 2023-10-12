@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import { ServiceService } from "./service.service";
+import { ServiceService } from "./review.service";
 
 const createService = catchAsync(async (req: Request, res: Response) => {
     const result = await ServiceService.createService(req.body);
