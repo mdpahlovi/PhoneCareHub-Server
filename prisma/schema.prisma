@@ -28,16 +28,15 @@ model User {
 }
 
 model Admin {
-    id        String    @id @default(uuid())
+    id        String   @id @default(uuid())
     name      String
-    role      Role      @default(admin)
-    type      AdminType
-    image     String    @default("https://shorturl.at/jnruF")
-    email     String    @unique
+    role      Role     @default(admin)
+    image     String   @default("https://shorturl.at/jnruF")
+    email     String   @unique
     password  String?
     phone     String?
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     @@map("admins")
 }
@@ -102,9 +101,6 @@ model Review {
 enum Role {
     user
     admin
-}
-
-enum AdminType {
     superadmin
 }
 
