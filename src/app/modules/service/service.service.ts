@@ -1,15 +1,28 @@
-import { Service } from "@prisma/client";
+import { Prisma, Service } from "@prisma/client";
+import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
+import { searchQuery } from "../../../helpers/searchQuery";
 import prisma from "../../../shared/prisma";
+import { serviceSearchableFields } from "./service.constant";
 
 const createService = async (payload: Service) => {
     const result = await prisma.service.create({ data: payload });
 
     return result;
 };
-const getAllService = async () => {
-    const result = await prisma.service.findMany();
+const getAllService = async (filters: { search?: string }, options: IOptions) => {
+    const { search } = filters;
+    const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
 
-    return result;
+    const andConditions = [];
+    if (search) andConditions.push(searchQuery(search, serviceSearchableFields));
+
+    const where: Prisma.ServiceWhereInput = { AND: andConditions };
+    const orderBy: Prisma.ServiceOrderByWithRelationInput = { [sortBy]: sortOrder };
+
+    const result = await prisma.service.findMany({ where, skip, take: size, orderBy });
+    const total = await prisma.service.count({ where });
+
+    return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };
 };
 const getSingleService = async (id: string) => {
     const result = await prisma.service.findUnique({ where: { id } });

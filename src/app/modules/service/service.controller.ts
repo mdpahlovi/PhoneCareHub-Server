@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
+import { paginationFields } from "../../../constants/pagination";
 import catchAsync from "../../../shared/catchAsync";
+import pick from "../../../shared/pick";
 import sendResponse from "../../../shared/sendResponse";
+import { serviceFilterableFields } from "./service.constant";
 import { ServiceService } from "./service.service";
 
 const createService = catchAsync(async (req: Request, res: Response) => {
@@ -16,13 +19,16 @@ const createService = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllService = catchAsync(async (req: Request, res: Response) => {
-    const result = await ServiceService.getAllService();
+    const filters = pick(req.query, serviceFilterableFields);
+    const paginationOptions = pick(req.query, paginationFields);
+    const result = await ServiceService.getAllService(filters, paginationOptions);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
         message: "Service Retrieves Successfully...!",
-        data: result,
+        meta: result.meta,
+        data: result.data,
     });
 });
 
