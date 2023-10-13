@@ -28,7 +28,7 @@ const signinUser = async (payload: SigninUserPayload) => {
 
     let isUserExist;
     const user = await prisma.user.findUnique({ where: { email }, select });
-    const admin = await prisma.admin.findUnique({ where: { email }, select: { ...select, type: true } });
+    const admin = await prisma.admin.findUnique({ where: { email }, select });
 
     if (!user && !admin) throw new Error("User doesn't exist...");
     if (user || admin) isUserExist = admin || user;

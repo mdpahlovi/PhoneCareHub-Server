@@ -1,11 +1,11 @@
-import { Admin, AdminType } from "@prisma/client";
+import { Admin } from "@prisma/client";
 import { hash } from "bcrypt";
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { exclude } from "../../../helpers/exclude";
 import prisma from "../../../shared/prisma";
 
-type CreateAdminPayload = { name: string; email: string; password: string; type: AdminType };
+type CreateAdminPayload = { name: string; email: string; password: string };
 
 const createAdmin = async (payload: CreateAdminPayload) => {
     const isExist = await prisma.admin.findUnique({ where: { email: payload.email } });
