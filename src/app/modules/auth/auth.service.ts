@@ -30,11 +30,11 @@ const signinUser = async (payload: SigninUserPayload) => {
     const user = await prisma.user.findUnique({ where: { email }, select });
     const admin = await prisma.admin.findUnique({ where: { email }, select });
 
-    if (!user && !admin) throw new Error("User doesn't exist...");
+    if (!user && !admin) throw new ApiError(httpStatus.NOT_FOUND, "User doesn't exist...");
     if (user || admin) isUserExist = admin || user;
 
     if (!isUserExist?.password || !(await compare(password, isUserExist.password))) {
-        throw new Error("Password doesn't match...!");
+        throw new ApiError(httpStatus.BAD_REQUEST, "Password doesn't match...!");
     }
 
     const result = exclude(isUserExist, ["password"]);

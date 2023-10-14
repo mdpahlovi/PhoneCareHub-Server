@@ -1,5 +1,7 @@
 import { Booking } from "@prisma/client";
+import httpStatus from "http-status";
 import { JWTPayload } from "jose";
+import ApiError from "../../../errors/ApiError";
 import prisma from "../../../shared/prisma";
 
 const createBooking = async (payload: Booking) => {
@@ -25,6 +27,7 @@ const getSingleBooking = async (id: string, user: JWTPayload) => {
         result = await prisma.booking.findUnique({ where: { id } });
     }
 
+    if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get data");
     return result;
 };
 const updateBooking = async (payload: Partial<Booking>, id: string) => {

@@ -15,29 +15,34 @@ const createAdmin = async (payload: CreateAdminPayload) => {
 
     payload.password = await hash(payload.password, 12);
     const user = await prisma.admin.create({ data: { ...payload } });
-    const result = exclude(user, ["password"]);
+    const result = exclude(user, ["password", "updatedAt"]);
 
     return result;
 };
 
 const getAllAdmin = async () => {
-    const result = await prisma.admin.findMany();
+    const admins = await prisma.admin.findMany();
 
+    const result = admins.map(admin => exclude(admin, ["password", "updatedAt"]));
     return result;
 };
 const getSingleAdmin = async (id: string) => {
-    const result = await prisma.admin.findUnique({ where: { id } });
+    const admin = await prisma.admin.findUnique({ where: { id } });
 
+    if (!admin) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get data");
+    const result = exclude(admin, ["password", "updatedAt"]);
     return result;
 };
 const updateAdmin = async (payload: Partial<Admin>, id: string) => {
-    const result = await prisma.admin.update({ where: { id }, data: payload });
+    const admin = await prisma.admin.update({ where: { id }, data: payload });
 
+    const result = exclude(admin, ["password", "updatedAt"]);
     return result;
 };
 const deleteAdmin = async (id: string) => {
-    const result = await prisma.admin.delete({ where: { id } });
+    const admin = await prisma.admin.delete({ where: { id } });
 
+    const result = exclude(admin, ["password", "updatedAt"]);
     return result;
 };
 
