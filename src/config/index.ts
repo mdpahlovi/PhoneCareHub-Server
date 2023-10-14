@@ -9,4 +9,9 @@ export default {
     env: process.env.NODE_ENV,
     secret: process.env.SECRET,
     database_url: process.env.DATABASE_URL,
+    cloud: {
+        name: process.env.CLOUDINARY_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+    },
 };

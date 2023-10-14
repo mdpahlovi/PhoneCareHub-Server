@@ -2,6 +2,7 @@ import express from "express";
 import { AdminRoutes } from "../modules/admin/admin.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { BookingRoutes } from "../modules/booking/booking.route";
+import { ProfileRoutes } from "../modules/profile/profile.route";
 import { ReviewRoutes } from "../modules/review/review.route";
 import { ServiceRoutes } from "../modules/service/service.route";
 import { UserRoutes } from "../modules/user/user.route";
@@ -32,6 +33,10 @@ const moduleRoutes = [
     {
         path: "/admin",
         route: AdminRoutes,
+    },
+    {
+        path: "/profile",
+        route: ProfileRoutes,
     },
 ];
 
