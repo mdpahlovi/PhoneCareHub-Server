@@ -21,7 +21,7 @@ const getUserProfile = async (jwtPayload: JWTPayload | null) => {
 
 const updateProfile = async (payload: User | Admin, jwtPayload: JWTPayload | null) => {
     if (payload.image) {
-        const result = await cloudinary.v2.uploader.upload(payload.image, { folder: "PhoneCareHub" });
+        const result = await cloudinary.v2.uploader.upload(payload.image, { folder: "PhoneCareHub/Profile" });
         if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to update image");
         payload.image = result.secure_url;
     }

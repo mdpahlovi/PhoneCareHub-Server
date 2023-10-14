@@ -1,4 +1,5 @@
 import { Prisma, Service } from "@prisma/client";
+import cloudinary from "cloudinary";
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
@@ -7,8 +8,13 @@ import prisma from "../../../shared/prisma";
 import { serviceSearchableFields } from "./service.constant";
 
 const createService = async (payload: Service) => {
-    const result = await prisma.service.create({ data: payload });
+    if (payload.image) {
+        const result = await cloudinary.v2.uploader.upload(payload.image, { folder: "PhoneCareHub/Service" });
+        if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to update image");
+        payload.image = result.secure_url;
+    }
 
+    const result = await prisma.service.create({ data: payload });
     return result;
 };
 const getAllService = async (filters: { search?: string }, options: IOptions) => {
@@ -33,8 +39,13 @@ const getSingleService = async (id: string) => {
     return result;
 };
 const updateService = async (payload: Partial<Service>, id: string) => {
-    const result = await prisma.service.update({ where: { id }, data: payload });
+    if (payload.image) {
+        const result = await cloudinary.v2.uploader.upload(payload.image, { folder: "PhoneCareHub/Service" });
+        if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to update image");
+        payload.image = result.secure_url;
+    }
 
+    const result = await prisma.service.update({ where: { id }, data: payload });
     return result;
 };
 const deleteService = async (id: string) => {

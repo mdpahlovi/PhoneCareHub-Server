@@ -98,6 +98,30 @@ model Review {
     @@map("reviews")
 }
 
+model Blog {
+    id            String   @id @default(uuid())
+    image         String
+    title         String
+    content       String
+    source        String
+    publishedDate DateTime
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    @@map("blogs")
+}
+
+model FAQs {
+    id        String   @id @default(uuid())
+    serial    Int
+    question  String
+    answer    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("faqs")
+}
+
 enum Role {
     user
     admin
