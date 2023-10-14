@@ -1,8 +1,9 @@
-import { Admin } from "@prisma/client";
+import { Admin, Prisma } from "@prisma/client";
 import { hash } from "bcrypt";
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { exclude } from "../../../helpers/exclude";
+import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 
 type CreateAdminPayload = { name: string; email: string; password: string };
@@ -20,11 +21,15 @@ const createAdmin = async (payload: CreateAdminPayload) => {
     return result;
 };
 
-const getAllAdmin = async () => {
-    const admins = await prisma.admin.findMany();
+const getAllAdmin = async (options: IOptions) => {
+    const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
+
+    const orderBy: Prisma.AdminOrderByWithRelationInput = { [sortBy]: sortOrder };
+    const admins = await prisma.admin.findMany({ skip, take: size, orderBy });
+    const total = await prisma.admin.count();
 
     const result = admins.map(admin => exclude(admin, ["password", "updatedAt"]));
-    return result;
+    return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };
 };
 const getSingleAdmin = async (id: string) => {
     const admin = await prisma.admin.findUnique({ where: { id } });
