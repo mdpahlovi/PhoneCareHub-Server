@@ -2,8 +2,8 @@ import express from "express";
 import { AdminRoutes } from "../modules/admin/admin.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { BlogRoutes } from "../modules/blog/blog.route";
-import { BookingRoutes } from "../modules/booking/booking.route";
 import { FAQRoutes } from "../modules/faq/faq.route";
+import { OnlineAppointmentRoutes } from "../modules/onlineBooking/onlineAppointment.route";
 import { ProfileRoutes } from "../modules/profile/profile.route";
 import { ReviewRoutes } from "../modules/review/review.route";
 import { ServiceRoutes } from "../modules/service/service.route";
@@ -21,8 +21,8 @@ const moduleRoutes = [
         route: ServiceRoutes,
     },
     {
-        path: "/booking",
-        route: BookingRoutes,
+        path: "/onlineAppointment",
+        route: OnlineAppointmentRoutes,
     },
     {
         path: "/review",

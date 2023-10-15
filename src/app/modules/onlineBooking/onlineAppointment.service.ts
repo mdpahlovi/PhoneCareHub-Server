@@ -7,12 +7,12 @@ import prisma from "../../../shared/prisma";
 
 type Payload = { serviceId: string; deviceInfo: string; issueDescription: string; shippingAddress: string };
 
-const createOnlineBooking = async (user: JWTPayload, payload: Payload) => {
+const createOnlineAppointment = async (user: JWTPayload, payload: Payload) => {
     const result = await prisma.onlineAppointment.create({ data: { userId: user?.sub!, ...payload } });
 
     return result;
 };
-const getAllOnlineBooking = async (user: JWTPayload) => {
+const getAllOnlineAppointment = async (user: JWTPayload) => {
     let result;
     if (user.role === "user") {
         result = await prisma.onlineAppointment.findMany({ where: { userId: user?.sub } });
@@ -22,7 +22,7 @@ const getAllOnlineBooking = async (user: JWTPayload) => {
 
     return result;
 };
-const getSingleOnlineBooking = async (id: string, user: JWTPayload) => {
+const getSingleOnlineAppointment = async (id: string, user: JWTPayload) => {
     let result;
     if (user.role === "user") {
         result = await prisma.onlineAppointment.findUnique({ where: { id, userId: user?.sub } });
@@ -33,7 +33,7 @@ const getSingleOnlineBooking = async (id: string, user: JWTPayload) => {
     if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get data");
     return result;
 };
-const updateOnlineBooking = async (id: string, user: JWTPayload, payload: Partial<OnlineAppointment>) => {
+const updateOnlineAppointment = async (id: string, user: JWTPayload, payload: Partial<OnlineAppointment>) => {
     let result;
     if (user.role === "user") {
         result = await prisma.onlineAppointment.update({ where: { id }, data: { status: "cancelled" } });
@@ -43,16 +43,16 @@ const updateOnlineBooking = async (id: string, user: JWTPayload, payload: Partia
 
     return result;
 };
-const deleteOnlineBooking = async (id: string) => {
+const deleteOnlineAppointment = async (id: string) => {
     const result = await prisma.onlineAppointment.delete({ where: { id } });
 
     return result;
 };
 
-export const OnlineBookingService = {
-    createOnlineBooking,
-    getAllOnlineBooking,
-    getSingleOnlineBooking,
-    updateOnlineBooking,
-    deleteOnlineBooking,
+export const OnlineAppointmentService = {
+    createOnlineAppointment,
+    getAllOnlineAppointment,
+    getSingleOnlineAppointment,
+    updateOnlineAppointment,
+    deleteOnlineAppointment,
 };
