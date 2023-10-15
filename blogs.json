@@ -1,72 +1,72 @@
 [
     {
-        "image": "",
+        "image": "https://i.ibb.co/ZJk2vc0/The-Latest-Mobile-Technology-Trends.jpg",
         "title": "The Latest Mobile Technology Trends",
         "content": "Explore the cutting-edge mobile technology trends shaping the future of smartphones and devices. Stay updated with the latest innovations and advancements in the mobile industry.",
         "source": "TechToday",
-        "publishedAt": "2023-10-01T10:00:00Z"
+        "publishedDate": "2023-10-01T10:00:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/vw4d8Mx/Tips-for-Extending-Your-Smartphone-s-Battery-Life.jpg",
         "title": "Tips for Extending Your Smartphone's Battery Life",
         "content": "Learn how to make your smartphone battery last longer with these practical tips and tricks. Maximize your device's battery performance and stay connected longer.",
         "source": "GadgetGuru",
-        "publishedAt": "2023-09-15T09:30:00Z"
+        "publishedDate": "2023-09-15T09:30:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/dGLcHT3/The-Evolution-of-Mobile-Operating-Systems.png",
         "title": "The Evolution of Mobile Operating Systems",
         "content": "Take a journey through the history and evolution of mobile operating systems, from the early days to the present. Learn how these systems have transformed our devices.",
         "source": "MobileTechInsider",
-        "publishedAt": "2023-08-28T14:15:00Z"
+        "publishedDate": "2023-08-28T14:15:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/HNSvhRn/Best-Apps-for-Productivity-on-the-Go.jpg",
         "title": "Best Apps for Productivity on the Go",
         "content": "Discover the top mobile apps that can boost your productivity and help you stay organized while on the move. These apps are your essential companions for efficiency.",
         "source": "AppAdvice",
-        "publishedAt": "2023-08-10T11:45:00Z"
+        "publishedDate": "2023-08-10T11:45:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/MPB2tFh/Smartphone-Camera-Innovations-What-s-Next.jpg",
         "title": "Smartphone Camera Innovations: What's Next?",
         "content": "Find out what exciting innovations are in store for smartphone cameras in the near future. Stay ahead of the game and capture moments like never before.",
         "source": "CameraTechMag",
-        "publishedAt": "2023-07-22T16:20:00Z"
+        "publishedDate": "2023-07-22T16:20:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/5cWwKCh/How-5-G-Is-Revolutionizing-Mobile-Connectivity.webp",
         "title": "How 5G Is Revolutionizing Mobile Connectivity",
         "content": "Explore the transformative impact of 5G technology on mobile communication and connectivity. Experience faster speeds, lower latency, and a connected world like never before.",
         "source": "5GWorld",
-        "publishedAt": "2023-07-06T10:30:00Z"
+        "publishedDate": "2023-07-06T10:30:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/6thNLy3/The-Art-of-Mobile-App-Design-Principles-and-Trends.png",
         "title": "The Art of Mobile App Design: Principles and Trends",
         "content": "Learn about the key design principles and emerging trends in mobile app design that can make your app stand out. Design with user experience in mind.",
         "source": "UXDesignHub",
-        "publishedAt": "2023-06-18T13:45:00Z"
+        "publishedDate": "2023-06-18T13:45:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/XLbKbVz/Mobile-Gaming-From-Snake-to-AAA-Titles.jpg",
         "title": "Mobile Gaming: From Snake to AAA Titles",
         "content": "Discover the remarkable journey of mobile gaming, from the early days of 'Snake' to today's blockbuster AAA titles. Game on with your mobile device!",
         "source": "GameWorldMag",
-        "publishedAt": "2023-05-30T14:10:00Z"
+        "publishedDate": "2023-05-30T14:10:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/10vRSrG/The-Impact-of-Foldable-Smartphones-on-User-Experience.jpg",
         "title": "The Impact of Foldable Smartphones on User Experience",
         "content": "Explore how foldable smartphones are redefining user experiences and offering innovative possibilities. Unfold a new world of mobile interaction.",
         "source": "TechInnovate",
-        "publishedAt": "2023-05-12T12:20:00Z"
+        "publishedDate": "2023-05-12T12:20:00Z"
     },
     {
-        "image": "",
+        "image": "https://i.ibb.co/H2FGL2M/Mobile-Security-Protecting-Your-Device-and-Data.jpg",
         "title": "Mobile Security: Protecting Your Device and Data",
         "content": "Get essential tips on securing your mobile device and safeguarding your data from threats and vulnerabilities. Keep your device and information safe and sound.",
         "source": "SecurityInsights",
-        "publishedAt": "2023-04-25T09:55:00Z"
+        "publishedDate": "2023-04-25T09:55:00Z"
     }
 ]
