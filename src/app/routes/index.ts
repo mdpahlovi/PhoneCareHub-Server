@@ -3,6 +3,7 @@ import { AdminRoutes } from "../modules/admin/admin.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { BlogRoutes } from "../modules/blog/blog.route";
 import { FAQRoutes } from "../modules/faq/faq.route";
+import { OfflineAppointmentRoutes } from "../modules/offlineBooking/offlineAppointment.route";
 import { OnlineAppointmentRoutes } from "../modules/onlineBooking/onlineAppointment.route";
 import { ProfileRoutes } from "../modules/profile/profile.route";
 import { ReviewRoutes } from "../modules/review/review.route";
@@ -23,6 +24,10 @@ const moduleRoutes = [
     {
         path: "/onlineAppointment",
         route: OnlineAppointmentRoutes,
+    },
+    {
+        path: "/offlineAppointment",
+        route: OfflineAppointmentRoutes,
     },
     {
         path: "/review",
