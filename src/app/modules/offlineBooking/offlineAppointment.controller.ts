@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
+import { paginationFields } from "../../../constants/pagination";
 import catchAsync from "../../../shared/catchAsync";
+import pick from "../../../shared/pick";
 import sendResponse from "../../../shared/sendResponse";
 import { OfflineAppointmentService } from "./offlineAppointment.service";
 
@@ -16,13 +18,16 @@ const createOfflineAppointment = catchAsync(async (req: Request, res: Response) 
 });
 
 const getAllOfflineAppointment = catchAsync(async (req: Request, res: Response) => {
-    const result = await OfflineAppointmentService.getAllOfflineAppointment(req.user);
+    const filters = pick(req.query, ["status"]);
+    const paginationOptions = pick(req.query, paginationFields);
+    const result = await OfflineAppointmentService.getAllOfflineAppointment(filters, paginationOptions, req.user);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
         message: "OfflineAppointment Retrieves Successfully...!",
-        data: result,
+        meta: result.meta,
+        data: result.data,
     });
 });
 

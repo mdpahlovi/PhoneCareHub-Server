@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-import { OfflineAppointment } from "@prisma/client";
+import { AppointmentStatus, OfflineAppointment, Prisma } from "@prisma/client";
 import httpStatus from "http-status";
 import { JWTPayload } from "jose";
 import ApiError from "../../../errors/ApiError";
+import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 
 type Payload = { serviceId: string; deviceInfo: string; issueDescription: string; appointmentDate: Date };
@@ -12,16 +13,24 @@ const createOfflineAppointment = async (user: JWTPayload, payload: Payload) => {
 
     return result;
 };
-const getAllOfflineAppointment = async (user: JWTPayload) => {
-    let result;
-    if (user.role === "user") {
-        result = await prisma.offlineAppointment.findMany({ where: { userId: user?.sub } });
-    } else {
-        result = await prisma.offlineAppointment.findMany();
-    }
 
-    return result;
+const getAllOfflineAppointment = async (filters: { status?: AppointmentStatus }, options: IOptions, user: JWTPayload) => {
+    const { status } = filters;
+    const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
+
+    const andConditions = [];
+    if (user.role === "user") andConditions.push({ userId: user?.sub });
+    if (status) andConditions.push({ status: { equals: status } });
+
+    const where: Prisma.OfflineAppointmentWhereInput = { AND: andConditions };
+    const orderBy: Prisma.OfflineAppointmentOrderByWithRelationInput = { [sortBy]: sortOrder };
+
+    const result = await prisma.offlineAppointment.findMany({ where, skip, take: size, orderBy });
+    const total = await prisma.offlineAppointment.count({ where });
+
+    return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };
 };
+
 const getSingleOfflineAppointment = async (id: string, user: JWTPayload) => {
     let result;
     if (user.role === "user") {

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-import { OnlineAppointment } from "@prisma/client";
+import { AppointmentStatus, OnlineAppointment, Prisma } from "@prisma/client";
 import httpStatus from "http-status";
 import { JWTPayload } from "jose";
 import ApiError from "../../../errors/ApiError";
+import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
 
 type Payload = { serviceId: string; deviceInfo: string; issueDescription: string; shippingAddress: string };
@@ -12,16 +13,24 @@ const createOnlineAppointment = async (user: JWTPayload, payload: Payload) => {
 
     return result;
 };
-const getAllOnlineAppointment = async (user: JWTPayload) => {
-    let result;
-    if (user.role === "user") {
-        result = await prisma.onlineAppointment.findMany({ where: { userId: user?.sub } });
-    } else {
-        result = await prisma.onlineAppointment.findMany();
-    }
 
-    return result;
+const getAllOnlineAppointment = async (filters: { status?: AppointmentStatus }, options: IOptions, user: JWTPayload) => {
+    const { status } = filters;
+    const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
+
+    const andConditions = [];
+    if (user.role === "user") andConditions.push({ userId: user?.sub });
+    if (status) andConditions.push({ status: { equals: status } });
+
+    const where: Prisma.OnlineAppointmentWhereInput = { AND: andConditions };
+    const orderBy: Prisma.OnlineAppointmentOrderByWithRelationInput = { [sortBy]: sortOrder };
+
+    const result = await prisma.onlineAppointment.findMany({ where, skip, take: size, orderBy });
+    const total = await prisma.onlineAppointment.count({ where });
+
+    return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };
 };
+
 const getSingleOnlineAppointment = async (id: string, user: JWTPayload) => {
     let result;
     if (user.role === "user") {
