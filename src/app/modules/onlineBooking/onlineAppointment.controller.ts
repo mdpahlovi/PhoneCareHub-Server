@@ -4,6 +4,7 @@ import { paginationFields } from "../../../constants/pagination";
 import catchAsync from "../../../shared/catchAsync";
 import pick from "../../../shared/pick";
 import sendResponse from "../../../shared/sendResponse";
+import { appointmentFilterableFields } from "../appointment/appointment.constant";
 import { OnlineAppointmentService } from "./onlineAppointment.service";
 
 const createOnlineAppointment = catchAsync(async (req: Request, res: Response) => {
@@ -18,9 +19,9 @@ const createOnlineAppointment = catchAsync(async (req: Request, res: Response) =
 });
 
 const getAllOnlineAppointment = catchAsync(async (req: Request, res: Response) => {
-    const { type } = req.params;
+    const filters = pick(req.query, appointmentFilterableFields);
     const paginationOptions = pick(req.query, paginationFields);
-    const result = await OnlineAppointmentService.getAllOnlineAppointment(type, paginationOptions, req.user);
+    const result = await OnlineAppointmentService.getAllOnlineAppointment(filters, paginationOptions, req.user);
 
     sendResponse(res, {
         success: true,

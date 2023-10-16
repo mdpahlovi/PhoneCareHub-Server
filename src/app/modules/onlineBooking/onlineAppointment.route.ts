@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/create", auth(USER_ROLE.USER), OnlineAppointmentController.createOnlineAppointment);
 
-router.get("/:type", auth(USER_ROLE.USER, USER_ROLE.ADMIN), OnlineAppointmentController.getAllOnlineAppointment);
+router.get("/", auth(USER_ROLE.USER, USER_ROLE.ADMIN), OnlineAppointmentController.getAllOnlineAppointment);
 
 router.get("/:id", auth(USER_ROLE.USER, USER_ROLE.ADMIN), OnlineAppointmentController.getSingleOnlineAppointment);
 

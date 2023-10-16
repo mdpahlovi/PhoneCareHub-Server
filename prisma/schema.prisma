@@ -161,7 +161,8 @@ enum Gender {
 enum AppointmentStatus {
     pending
     reviewing
-    paymentPending
+    payment
+    servicing
     completed
     cancelled
 }
