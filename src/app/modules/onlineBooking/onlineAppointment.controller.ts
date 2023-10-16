@@ -18,9 +18,9 @@ const createOnlineAppointment = catchAsync(async (req: Request, res: Response) =
 });
 
 const getAllOnlineAppointment = catchAsync(async (req: Request, res: Response) => {
-    const filters = pick(req.query, ["status"]);
+    const { type } = req.params;
     const paginationOptions = pick(req.query, paginationFields);
-    const result = await OnlineAppointmentService.getAllOnlineAppointment(filters, paginationOptions, req.user);
+    const result = await OnlineAppointmentService.getAllOnlineAppointment(type, paginationOptions, req.user);
 
     sendResponse(res, {
         success: true,

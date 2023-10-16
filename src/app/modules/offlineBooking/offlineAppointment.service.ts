@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
-import { AppointmentStatus, OfflineAppointment, Prisma } from "@prisma/client";
+import { OfflineAppointment, Prisma } from "@prisma/client";
 import httpStatus from "http-status";
 import { JWTPayload } from "jose";
 import ApiError from "../../../errors/ApiError";
@@ -14,18 +15,35 @@ const createOfflineAppointment = async (user: JWTPayload, payload: Payload) => {
     return result;
 };
 
-const getAllOfflineAppointment = async (filters: { status?: AppointmentStatus }, options: IOptions, user: JWTPayload) => {
-    const { status } = filters;
+const getAllOfflineAppointment = async (type: string, options: IOptions, user: JWTPayload) => {
     const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
 
-    const andConditions = [];
+    const andConditions: any[] = [];
     if (user.role === "user") andConditions.push({ userId: user?.sub });
-    if (status) andConditions.push({ status: { equals: status } });
+    switch (type) {
+        case "appointments":
+            andConditions.push({
+                OR: [{ status: { equals: "pending" } }, { status: { equals: "reviewing" } }, { status: { equals: "paymentPending" } }],
+            });
+            break;
+        case "completed":
+            andConditions.push({ status: { equals: "completed" } });
+            break;
+        case "cancelled":
+            andConditions.push({ status: { equals: "cancelled" } });
+            break;
+    }
 
     const where: Prisma.OfflineAppointmentWhereInput = { AND: andConditions };
     const orderBy: Prisma.OfflineAppointmentOrderByWithRelationInput = { [sortBy]: sortOrder };
 
-    const result = await prisma.offlineAppointment.findMany({ where, skip, take: size, orderBy });
+    const result = await prisma.offlineAppointment.findMany({
+        where,
+        include: { user: { select: { name: true, image: true } }, service: { select: { name: true } } },
+        skip,
+        take: size,
+        orderBy,
+    });
     const total = await prisma.offlineAppointment.count({ where });
 
     return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };

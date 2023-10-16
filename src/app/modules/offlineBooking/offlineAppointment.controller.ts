@@ -18,9 +18,9 @@ const createOfflineAppointment = catchAsync(async (req: Request, res: Response) 
 });
 
 const getAllOfflineAppointment = catchAsync(async (req: Request, res: Response) => {
-    const filters = pick(req.query, ["status"]);
+    const { type } = req.params;
     const paginationOptions = pick(req.query, paginationFields);
-    const result = await OfflineAppointmentService.getAllOfflineAppointment(filters, paginationOptions, req.user);
+    const result = await OfflineAppointmentService.getAllOfflineAppointment(type, paginationOptions, req.user);
 
     sendResponse(res, {
         success: true,
