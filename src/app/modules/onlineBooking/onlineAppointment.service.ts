@@ -4,9 +4,10 @@ import { OnlineAppointment, Prisma } from "@prisma/client";
 import httpStatus from "http-status";
 import { JWTPayload } from "jose";
 import ApiError from "../../../errors/ApiError";
+import { appointmentSearchQuery } from "../../../helpers/appointmentSearchQuery";
 import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
-import { AppointmentFilter } from "../appointment/appointment.constant";
+import { AppointmentFilter, appointmentSearchableFields } from "./onlineAppointment.constant";
 
 type Payload = { serviceId: string; deviceInfo: string; issueDescription: string; shippingAddress: string };
 
@@ -17,11 +18,13 @@ const createOnlineAppointment = async (user: JWTPayload, payload: Payload) => {
 };
 
 const getAllOnlineAppointment = async (filter: AppointmentFilter, options: IOptions, user: JWTPayload) => {
-    const { status, email } = filter;
+    const { search, status } = filter;
     const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
 
     const andConditions: any[] = [];
     if (user.role === "user") andConditions.push({ userId: user?.sub });
+
+    if (search) andConditions.push(appointmentSearchQuery(search, appointmentSearchableFields));
 
     if (status) {
         if (Array.isArray(status)) {
@@ -31,20 +34,12 @@ const getAllOnlineAppointment = async (filter: AppointmentFilter, options: IOpti
         }
     }
 
-    if (email) {
-        if (Array.isArray(email)) {
-            andConditions.push({ OR: email.map(date => ({ user: { email: { equals: date } } })) });
-        } else {
-            andConditions.push({ user: { email: { equals: email } } });
-        }
-    }
-
     const where: Prisma.OnlineAppointmentWhereInput = { AND: andConditions };
     const orderBy: Prisma.OnlineAppointmentOrderByWithRelationInput = { [sortBy]: sortOrder };
 
     const result = await prisma.onlineAppointment.findMany({
         where,
-        include: { user: { select: { name: true, image: true } }, service: { select: { name: true } } },
+        include: { user: true, service: true, payment: true },
         skip,
         take: size,
         orderBy,
@@ -57,9 +52,12 @@ const getAllOnlineAppointment = async (filter: AppointmentFilter, options: IOpti
 const getSingleOnlineAppointment = async (id: string, user: JWTPayload) => {
     let result;
     if (user.role === "user") {
-        result = await prisma.onlineAppointment.findUnique({ where: { id, userId: user?.sub } });
+        result = await prisma.onlineAppointment.findUnique({
+            where: { id, userId: user?.sub },
+            include: { user: true, service: true, payment: true },
+        });
     } else {
-        result = await prisma.onlineAppointment.findUnique({ where: { id } });
+        result = await prisma.onlineAppointment.findUnique({ where: { id }, include: { user: true, service: true, payment: true } });
     }
 
     if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get data");

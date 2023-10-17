@@ -4,7 +4,7 @@ import { paginationFields } from "../../../constants/pagination";
 import catchAsync from "../../../shared/catchAsync";
 import pick from "../../../shared/pick";
 import sendResponse from "../../../shared/sendResponse";
-import { appointmentFilterableFields } from "../appointment/appointment.constant";
+import { appointmentFilterableFields } from "./offlineAppointment.constant";
 import { OfflineAppointmentService } from "./offlineAppointment.service";
 
 const createOfflineAppointment = catchAsync(async (req: Request, res: Response) => {

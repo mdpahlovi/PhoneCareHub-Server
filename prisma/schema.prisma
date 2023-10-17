@@ -95,7 +95,7 @@ model Payment {
     id                  String            @id @default(uuid())
     onlineAppointmentId String            @unique
     method              String
-    amount              String
+    amount              Float
     transactionId       String
     paymentDate         DateTime          @default(now())
     onlineAppointment   OnlineAppointment @relation(fields: [onlineAppointmentId], references: [id])

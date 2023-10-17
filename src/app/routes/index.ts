@@ -5,6 +5,7 @@ import { BlogRoutes } from "../modules/blog/blog.route";
 import { FAQRoutes } from "../modules/faq/faq.route";
 import { OfflineAppointmentRoutes } from "../modules/offlineBooking/offlineAppointment.route";
 import { OnlineAppointmentRoutes } from "../modules/onlineBooking/onlineAppointment.route";
+import { PaymentRoutes } from "../modules/payment/payment.route";
 import { ProfileRoutes } from "../modules/profile/profile.route";
 import { ReviewRoutes } from "../modules/review/review.route";
 import { ServiceRoutes } from "../modules/service/service.route";
@@ -28,6 +29,10 @@ const moduleRoutes = [
     {
         path: "/offlineAppointment",
         route: OfflineAppointmentRoutes,
+    },
+    {
+        path: "/payment",
+        route: PaymentRoutes,
     },
     {
         path: "/review",

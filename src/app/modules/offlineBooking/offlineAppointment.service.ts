@@ -4,9 +4,10 @@ import { OfflineAppointment, Prisma } from "@prisma/client";
 import httpStatus from "http-status";
 import { JWTPayload } from "jose";
 import ApiError from "../../../errors/ApiError";
+import { appointmentSearchQuery } from "../../../helpers/appointmentSearchQuery";
 import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
-import { AppointmentFilter } from "../appointment/appointment.constant";
+import { AppointmentFilter, appointmentSearchableFields } from "./offlineAppointment.constant";
 
 type Payload = { serviceId: string; deviceInfo: string; issueDescription: string; appointmentDate: Date };
 
@@ -17,11 +18,13 @@ const createOfflineAppointment = async (user: JWTPayload, payload: Payload) => {
 };
 
 const getAllOfflineAppointment = async (filter: AppointmentFilter, options: IOptions, user: JWTPayload) => {
-    const { status, appointmentDate, email } = filter;
+    const { search, status, appointmentDate } = filter;
     const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
 
     const andConditions: any[] = [];
     if (user.role === "user") andConditions.push({ userId: user?.sub });
+
+    if (search) andConditions.push(appointmentSearchQuery(search, appointmentSearchableFields));
 
     if (status) {
         if (Array.isArray(status)) {
@@ -39,20 +42,12 @@ const getAllOfflineAppointment = async (filter: AppointmentFilter, options: IOpt
         }
     }
 
-    if (email) {
-        if (Array.isArray(email)) {
-            andConditions.push({ OR: email.map(date => ({ user: { email: { equals: date } } })) });
-        } else {
-            andConditions.push({ user: { email: { equals: email } } });
-        }
-    }
-
     const where: Prisma.OfflineAppointmentWhereInput = { AND: andConditions };
     const orderBy: Prisma.OfflineAppointmentOrderByWithRelationInput = { [sortBy]: sortOrder };
 
     const result = await prisma.offlineAppointment.findMany({
         where,
-        include: { user: { select: { name: true, image: true } }, service: { select: { name: true } } },
+        include: { user: true, service: true },
         skip,
         take: size,
         orderBy,
@@ -65,9 +60,12 @@ const getAllOfflineAppointment = async (filter: AppointmentFilter, options: IOpt
 const getSingleOfflineAppointment = async (id: string, user: JWTPayload) => {
     let result;
     if (user.role === "user") {
-        result = await prisma.offlineAppointment.findUnique({ where: { id, userId: user?.sub } });
+        result = await prisma.offlineAppointment.findUnique({
+            where: { id, userId: user?.sub },
+            include: { user: true, service: true },
+        });
     } else {
-        result = await prisma.offlineAppointment.findUnique({ where: { id } });
+        result = await prisma.offlineAppointment.findUnique({ where: { id }, include: { user: true, service: true } });
     }
 
     if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get data");
