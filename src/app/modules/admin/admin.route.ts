@@ -11,9 +11,9 @@ router.post("/create", auth(USER_ROLE.SUPERADMIN), validateRequest(AdminValidati
 
 router.get("/", auth(USER_ROLE.SUPERADMIN), AdminController.getAllAdmin);
 
-router.get("/:id", auth(USER_ROLE.ADMIN, USER_ROLE.SUPERADMIN), AdminController.getSingleAdmin);
+router.get("/:id", auth(USER_ROLE.SUPERADMIN), AdminController.getSingleAdmin);
 
-router.patch("/:id", auth(USER_ROLE.ADMIN, USER_ROLE.SUPERADMIN), AdminController.updateAdmin);
+router.patch("/:id", auth(USER_ROLE.SUPERADMIN), AdminController.updateAdmin);
 
 router.delete("/:id", auth(USER_ROLE.SUPERADMIN), AdminController.deleteAdmin);
 

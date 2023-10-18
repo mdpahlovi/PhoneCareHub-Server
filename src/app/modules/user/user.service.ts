@@ -1,9 +1,25 @@
 import { Prisma, User } from "@prisma/client";
+import { hash } from "bcrypt";
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { exclude } from "../../../helpers/exclude";
 import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
 import prisma from "../../../shared/prisma";
+
+type CreateUserPayload = { name: string; email: string; password: string };
+
+const createUser = async (payload: CreateUserPayload) => {
+    const isExist = await prisma.user.findUnique({ where: { email: payload.email } });
+    if (isExist) {
+        throw new ApiError(httpStatus.UNPROCESSABLE_ENTITY, "User Already Exists...!");
+    }
+
+    payload.password = await hash(payload.password, 12);
+    const user = await prisma.user.create({ data: { ...payload } });
+    const result = exclude(user, ["password", "updatedAt"]);
+
+    return result;
+};
 
 const getAllUser = async (options: IOptions) => {
     const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
@@ -23,6 +39,7 @@ const getSingleUser = async (id: string) => {
     return result;
 };
 const updateUser = async (payload: Partial<User>, id: string) => {
+    if (payload.password) payload.password = await hash(payload.password, 12);
     const user = await prisma.user.update({ where: { id }, data: payload });
 
     const result = exclude(user, ["password", "provider", "updatedAt"]);
@@ -35,4 +52,4 @@ const deleteUser = async (id: string) => {
     return result;
 };
 
-export const UserService = { getAllUser, getSingleUser, updateUser, deleteUser };
+export const UserService = { createUser, getAllUser, getSingleUser, updateUser, deleteUser };

@@ -27,13 +27,13 @@ const getAllService = async (filters: { search?: string }, options: IOptions) =>
     const where: Prisma.ServiceWhereInput = { AND: andConditions };
     const orderBy: Prisma.ServiceOrderByWithRelationInput = { [sortBy]: sortOrder };
 
-    const result = await prisma.service.findMany({ where, skip, take: size, orderBy });
+    const result = await prisma.service.findMany({ where, include: { reviews: true }, skip, take: size, orderBy });
     const total = await prisma.service.count({ where });
 
     return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };
 };
 const getSingleService = async (id: string) => {
-    const result = await prisma.service.findUnique({ where: { id } });
+    const result = await prisma.service.findUnique({ where: { id }, include: { reviews: true } });
 
     if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to get data");
     return result;

@@ -39,6 +39,7 @@ const getSingleAdmin = async (id: string) => {
     return result;
 };
 const updateAdmin = async (payload: Partial<Admin>, id: string) => {
+    if (payload.password) payload.password = await hash(payload.password, 12);
     const admin = await prisma.admin.update({ where: { id }, data: payload });
 
     const result = exclude(admin, ["password", "updatedAt"]);

@@ -1,4 +1,5 @@
 import { Admin, User } from "@prisma/client";
+import { hash } from "bcrypt";
 import cloudinary from "cloudinary";
 import httpStatus from "http-status";
 import { JWTPayload } from "jose";
@@ -25,6 +26,8 @@ const updateProfile = async (payload: User | Admin, jwtPayload: JWTPayload | nul
         if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to update image");
         payload.image = result.secure_url;
     }
+
+    if (payload.password) payload.password = await hash(payload.password, 12);
 
     let user;
     if (jwtPayload!.role === "user") {
