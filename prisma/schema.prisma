@@ -73,6 +73,8 @@ model OnlineAppointment {
     user             User              @relation(fields: [userId], references: [id])
     service          Service           @relation(fields: [serviceId], references: [id])
     payment          Payment?
+
+    @@map("online_appointments")
 }
 
 model OfflineAppointment {
@@ -89,6 +91,8 @@ model OfflineAppointment {
     updatedAt        DateTime          @updatedAt
     user             User              @relation(fields: [userId], references: [id])
     service          Service           @relation(fields: [serviceId], references: [id])
+
+    @@map("offline_appointments")
 }
 
 model Payment {

@@ -4,7 +4,9 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { exclude } from "../../../helpers/exclude";
 import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
+import { searchQuery } from "../../../helpers/searchQuery";
 import prisma from "../../../shared/prisma";
+import { userSearchableFields } from "./user.constant";
 
 type CreateUserPayload = { name: string; email: string; password: string };
 
@@ -21,12 +23,17 @@ const createUser = async (payload: CreateUserPayload) => {
     return result;
 };
 
-const getAllUser = async (options: IOptions) => {
+const getAllUser = async (filters: { search?: string }, options: IOptions) => {
+    const { search } = filters;
     const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
 
+    const andConditions = [];
+    if (search) andConditions.push(searchQuery(search, userSearchableFields));
+
+    const where: Prisma.UserWhereInput = { AND: andConditions };
     const orderBy: Prisma.UserOrderByWithRelationInput = { [sortBy]: sortOrder };
-    const users = await prisma.user.findMany({ skip, take: size, orderBy });
-    const total = await prisma.user.count();
+    const users = await prisma.user.findMany({ where, skip, take: size, orderBy });
+    const total = await prisma.user.count({ where });
 
     const result = users.map(user => exclude(user, ["password", "provider", "updatedAt"]));
     return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };

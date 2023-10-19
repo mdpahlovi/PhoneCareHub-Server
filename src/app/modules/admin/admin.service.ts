@@ -4,7 +4,9 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { exclude } from "../../../helpers/exclude";
 import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
+import { searchQuery } from "../../../helpers/searchQuery";
 import prisma from "../../../shared/prisma";
+import { adminSearchableFields } from "./admin.constant";
 
 type CreateAdminPayload = { name: string; email: string; password: string };
 
@@ -21,12 +23,17 @@ const createAdmin = async (payload: CreateAdminPayload) => {
     return result;
 };
 
-const getAllAdmin = async (options: IOptions) => {
+const getAllAdmin = async (filters: { search?: string }, options: IOptions) => {
+    const { search } = filters;
     const { page, size, skip, sortBy, sortOrder } = calculateOptions(options);
 
+    const andConditions = [];
+    if (search) andConditions.push(searchQuery(search, adminSearchableFields));
+
+    const where: Prisma.AdminWhereInput = { AND: andConditions };
     const orderBy: Prisma.AdminOrderByWithRelationInput = { [sortBy]: sortOrder };
-    const admins = await prisma.admin.findMany({ skip, take: size, orderBy });
-    const total = await prisma.admin.count();
+    const admins = await prisma.admin.findMany({ where, skip, take: size, orderBy });
+    const total = await prisma.admin.count({ where });
 
     const result = admins.map(admin => exclude(admin, ["password", "updatedAt"]));
     return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };
