@@ -15,6 +15,17 @@ const createReview = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getAllReview = catchAsync(async (req: Request, res: Response) => {
+    const result = await ReviewService.getAllReview();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Review Retrieve Successfully...!",
+        data: result,
+    });
+});
+
 const updateReview = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await ReviewService.updateReview(req.body, id);
@@ -39,4 +50,4 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export const ReviewController = { createReview, updateReview, deleteReview };
+export const ReviewController = { createReview, getAllReview, updateReview, deleteReview };

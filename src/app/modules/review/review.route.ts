@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.post("/create", auth(USER_ROLE.USER), validateRequest(ReviewValidation.createReview), ReviewController.createReview);
 
+router.get("/", ReviewController.getAllReview);
+
 router.patch("/:id", auth(USER_ROLE.USER), validateRequest(ReviewValidation.updateReview), ReviewController.updateReview);
 
 router.delete("/:id", auth(USER_ROLE.USER), ReviewController.deleteReview);

@@ -9,7 +9,7 @@ const createFAQ = async (payload: FAQs) => {
     return result;
 };
 const getAllFAQ = async () => {
-    const result = await prisma.fAQs.findMany({ orderBy: { serial: "asc" } });
+    const result = await prisma.fAQs.findMany({ orderBy: { serial: "desc" } });
 
     return result;
 };
