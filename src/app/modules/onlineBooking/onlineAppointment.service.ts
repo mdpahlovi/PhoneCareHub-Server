@@ -39,7 +39,7 @@ const getAllOnlineAppointment = async (filter: AppointmentFilter, options: IOpti
 
     const result = await prisma.onlineAppointment.findMany({
         where,
-        include: { user: true, service: true, payment: true },
+        include: { user: true, service: true, payment: true, deviceShipping: true, deviceReturned: true },
         skip,
         take: size,
         orderBy,
@@ -54,7 +54,7 @@ const getSingleOnlineAppointment = async (id: string, user: JWTPayload) => {
     if (user.role === "user") {
         result = await prisma.onlineAppointment.findUnique({
             where: { id, userId: user?.sub },
-            include: { user: true, service: true, payment: true },
+            include: { user: true, service: true, payment: true, deviceShipping: true, deviceReturned: true },
         });
     } else {
         result = await prisma.onlineAppointment.findUnique({ where: { id }, include: { user: true, service: true, payment: true } });

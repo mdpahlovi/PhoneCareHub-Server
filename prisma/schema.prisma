@@ -32,6 +32,7 @@ model Admin {
     id        String   @id @default(uuid())
     name      String
     role      Role     @default(admin)
+    title     String?
     image     String   @default("https://shorturl.at/jnruF")
     email     String   @unique
     password  String?
@@ -58,41 +59,56 @@ model Service {
 }
 
 model OnlineAppointment {
-    id               String            @id @default(uuid())
+    id               String                  @id @default(uuid())
     userId           String
     serviceId        String
     deviceInfo       String
     issueDescription String
     shippingAddress  String
-    status           AppointmentStatus @default(pending)
+    status           OnlineAppointmentStatus @default(pending)
     paymentAmount    Float?
-    issueDidected    String[]
+    issueDetected    String[]
     deliveryDate     String?
-    createdAt        DateTime          @default(now())
-    updatedAt        DateTime          @updatedAt
-    user             User              @relation(fields: [userId], references: [id])
-    service          Service           @relation(fields: [serviceId], references: [id])
+    createdAt        DateTime                @default(now())
+    updatedAt        DateTime                @updatedAt
+    user             User                    @relation(fields: [userId], references: [id])
+    service          Service                 @relation(fields: [serviceId], references: [id])
     payment          Payment?
+    deviceShipping   DeviceShipping?
+    deviceReturned   DeviceReturned?
 
     @@map("online_appointments")
 }
 
 model OfflineAppointment {
-    id               String            @id @default(uuid())
+    id               String                   @id @default(uuid())
     userId           String
     serviceId        String
     deviceInfo       String
     issueDescription String
     appointmentDate  DateTime
-    status           AppointmentStatus @default(pending)
+    status           OfflineAppointmentStatus @default(pending)
     paymentAmount    Float?
-    issueDidected    String[]
-    createdAt        DateTime          @default(now())
-    updatedAt        DateTime          @updatedAt
-    user             User              @relation(fields: [userId], references: [id])
-    service          Service           @relation(fields: [serviceId], references: [id])
+    issueDetected    String[]
+    createdAt        DateTime                 @default(now())
+    updatedAt        DateTime                 @updatedAt
+    user             User                     @relation(fields: [userId], references: [id])
+    service          Service                  @relation(fields: [serviceId], references: [id])
 
     @@map("offline_appointments")
+}
+
+model DeviceShipping {
+    id                  String            @id @default(uuid())
+    onlineAppointmentId String            @unique
+    courierName         String
+    productId           String
+    receiptDate         DateTime
+    createdAt           DateTime          @default(now())
+    updatedAt           DateTime          @updatedAt
+    onlineAppointment   OnlineAppointment @relation(fields: [onlineAppointmentId], references: [id])
+
+    @@map("device_shipping")
 }
 
 model Payment {
@@ -105,6 +121,19 @@ model Payment {
     onlineAppointment   OnlineAppointment @relation(fields: [onlineAppointmentId], references: [id])
 
     @@map("payments")
+}
+
+model DeviceReturned {
+    id                  String            @id @default(uuid())
+    onlineAppointmentId String            @unique
+    courierName         String
+    productId           String
+    receiptDate         DateTime
+    createdAt           DateTime          @default(now())
+    updatedAt           DateTime          @updatedAt
+    onlineAppointment   OnlineAppointment @relation(fields: [onlineAppointmentId], references: [id])
+
+    @@map("device_returned")
 }
 
 model Review {
@@ -162,11 +191,20 @@ enum Gender {
     transgender
 }
 
-enum AppointmentStatus {
+enum OnlineAppointmentStatus {
     pending
+    shipping
+    receited
     reviewing
     payment
-    servicing
+    repairing
+    returned
+    received
+    cancelled
+}
+
+enum OfflineAppointmentStatus {
+    pending
     completed
     cancelled
 }

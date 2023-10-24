@@ -2,6 +2,8 @@ import express from "express";
 import { AdminRoutes } from "../modules/admin/admin.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { BlogRoutes } from "../modules/blog/blog.route";
+import { DeviceReturnedRoutes } from "../modules/deviceReturned/deviceReturned.route";
+import { DeviceShippingRoutes } from "../modules/deviceShipping/deviceShipping.route";
 import { FAQRoutes } from "../modules/faq/faq.route";
 import { OfflineAppointmentRoutes } from "../modules/offlineBooking/offlineAppointment.route";
 import { OnlineAppointmentRoutes } from "../modules/onlineBooking/onlineAppointment.route";
@@ -31,8 +33,16 @@ const moduleRoutes = [
         route: OfflineAppointmentRoutes,
     },
     {
+        path: "/deviceShipping",
+        route: DeviceShippingRoutes,
+    },
+    {
         path: "/payment",
         route: PaymentRoutes,
+    },
+    {
+        path: "/deviceReturned",
+        route: DeviceReturnedRoutes,
     },
     {
         path: "/review",
