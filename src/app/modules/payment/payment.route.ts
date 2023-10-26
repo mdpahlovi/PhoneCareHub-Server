@@ -5,10 +5,10 @@ import { PaymentController } from "./payment.controller";
 
 const router = express.Router();
 
-router.post("/create", auth(USER_ROLE.USER), PaymentController.createPayment);
+router.post("/create", auth(USER_ROLE.USER, USER_ROLE.ADMIN), PaymentController.createPayment);
 
-router.patch("/:id", auth(USER_ROLE.USER), PaymentController.updatePayment);
+router.patch("/:id", auth(USER_ROLE.USER, USER_ROLE.ADMIN), PaymentController.updatePayment);
 
-router.delete("/:id", auth(USER_ROLE.USER), PaymentController.deletePayment);
+router.delete("/:id", auth(USER_ROLE.USER, USER_ROLE.ADMIN), PaymentController.deletePayment);
 
 export const PaymentRoutes = router;
