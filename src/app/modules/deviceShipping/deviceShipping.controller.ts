@@ -15,4 +15,28 @@ const createDeviceShipping = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export const DeviceShippingController = { createDeviceShipping };
+const updateDeviceShipping = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await DeviceShippingService.updateDeviceShipping(req.body, id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "DeviceShipping Updated Successfully...!",
+        data: result,
+    });
+});
+
+const deleteDeviceShipping = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await DeviceShippingService.deleteDeviceShipping(id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "DeviceShipping Deleted Successfully...!",
+        data: result,
+    });
+});
+
+export const DeviceShippingController = { createDeviceShipping, updateDeviceShipping, deleteDeviceShipping };

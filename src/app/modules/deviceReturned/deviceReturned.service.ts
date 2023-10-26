@@ -11,4 +11,16 @@ const createDeviceReturned = async (payload: DeviceReturned) => {
     return result;
 };
 
-export const DeviceReturnedService = { createDeviceReturned };
+const updateDeviceReturned = async (payload: Partial<DeviceReturned>, id: string) => {
+    const result = await prisma.deviceReturned.update({ where: { id }, data: payload });
+
+    return result;
+};
+
+const deleteDeviceReturned = async (id: string) => {
+    const result = await prisma.deviceReturned.delete({ where: { id } });
+
+    return result;
+};
+
+export const DeviceReturnedService = { createDeviceReturned, updateDeviceReturned, deleteDeviceReturned };

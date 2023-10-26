@@ -15,4 +15,28 @@ const createPayment = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export const PaymentController = { createPayment };
+const updatePayment = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await PaymentService.updatePayment(req.body, id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Payment Updated Successfully...!",
+        data: result,
+    });
+});
+
+const deletePayment = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await PaymentService.deletePayment(id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Payment Deleted Successfully...!",
+        data: result,
+    });
+});
+
+export const PaymentController = { createPayment, updatePayment, deletePayment };

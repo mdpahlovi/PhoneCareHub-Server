@@ -32,6 +32,17 @@ const getAllAdmin = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getTeamAdmin = catchAsync(async (req: Request, res: Response) => {
+    const result = await AdminService.getTeamAdmin();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Admin Retrieves Successfully...!",
+        data: result,
+    });
+});
+
 const getSingleAdmin = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
     const result = await AdminService.getSingleAdmin(id);
@@ -68,4 +79,4 @@ const deleteAdmin = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export const AdminController = { createAdmin, getAllAdmin, getSingleAdmin, updateAdmin, deleteAdmin };
+export const AdminController = { createAdmin, getAllAdmin, getTeamAdmin, getSingleAdmin, updateAdmin, deleteAdmin };

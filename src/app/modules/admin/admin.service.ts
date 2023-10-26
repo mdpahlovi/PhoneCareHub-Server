@@ -38,6 +38,13 @@ const getAllAdmin = async (filters: { search?: string }, options: IOptions) => {
     const result = admins.map(admin => exclude(admin, ["password", "updatedAt"]));
     return { meta: { page, size, total, totalPage: Math.ceil(total / size) }, data: result };
 };
+
+const getTeamAdmin = async () => {
+    const result = await prisma.admin.findMany({ select: { image: true, name: true, title: true }, take: 6 });
+
+    return result;
+};
+
 const getSingleAdmin = async (id: string) => {
     const admin = await prisma.admin.findUnique({ where: { id } });
 
@@ -45,6 +52,7 @@ const getSingleAdmin = async (id: string) => {
     const result = exclude(admin, ["password", "updatedAt"]);
     return result;
 };
+
 const updateAdmin = async (payload: Partial<Admin>, id: string) => {
     if (payload.password) payload.password = await hash(payload.password, 12);
     const admin = await prisma.admin.update({ where: { id }, data: payload });
@@ -52,6 +60,7 @@ const updateAdmin = async (payload: Partial<Admin>, id: string) => {
     const result = exclude(admin, ["password", "updatedAt"]);
     return result;
 };
+
 const deleteAdmin = async (id: string) => {
     const admin = await prisma.admin.delete({ where: { id } });
 
@@ -59,4 +68,4 @@ const deleteAdmin = async (id: string) => {
     return result;
 };
 
-export const AdminService = { createAdmin, getAllAdmin, getSingleAdmin, updateAdmin, deleteAdmin };
+export const AdminService = { createAdmin, getAllAdmin, getTeamAdmin, getSingleAdmin, updateAdmin, deleteAdmin };

@@ -7,4 +7,8 @@ const router = express.Router();
 
 router.post("/create", auth(USER_ROLE.USER), DeviceReturnedController.createDeviceReturned);
 
+router.patch("/:id", auth(USER_ROLE.USER), DeviceReturnedController.updateDeviceReturned);
+
+router.delete("/:id", auth(USER_ROLE.USER), DeviceReturnedController.deleteDeviceReturned);
+
 export const DeviceReturnedRoutes = router;

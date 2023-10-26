@@ -11,4 +11,16 @@ const createPayment = async (payload: Payment) => {
     return result;
 };
 
-export const PaymentService = { createPayment };
+const updatePayment = async (payload: Partial<Payment>, id: string) => {
+    const result = await prisma.payment.update({ where: { id }, data: payload });
+
+    return result;
+};
+
+const deletePayment = async (id: string) => {
+    const result = await prisma.payment.delete({ where: { id } });
+
+    return result;
+};
+
+export const PaymentService = { createPayment, updatePayment, deletePayment };
