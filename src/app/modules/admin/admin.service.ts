@@ -40,7 +40,11 @@ const getAllAdmin = async (filters: { search?: string }, options: IOptions) => {
 };
 
 const getTeamAdmin = async () => {
-    const result = await prisma.admin.findMany({ select: { image: true, name: true, title: true }, take: 6 });
+    const result = await prisma.admin.findMany({
+        select: { image: true, name: true, title: true },
+        take: 6,
+        orderBy: { createdAt: "asc" },
+    });
 
     return result;
 };
