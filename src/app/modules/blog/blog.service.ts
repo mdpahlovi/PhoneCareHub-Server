@@ -1,18 +1,14 @@
 import { Blog, Prisma } from "@prisma/client";
-import cloudinary from "cloudinary";
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { IOptions, calculateOptions } from "../../../helpers/paginationHelper";
 import { searchQuery } from "../../../helpers/searchQuery";
+import uploadImage from "../../../helpers/uploadImage";
 import prisma from "../../../shared/prisma";
 import { blogSearchableFields } from "./blog.constant";
 
 const createBlog = async (payload: Blog) => {
-    if (payload.image) {
-        const result = await cloudinary.v2.uploader.upload(payload.image, { folder: "PhoneCareHub/Blog" });
-        if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to update image");
-        payload.image = result.secure_url;
-    }
+    if (payload.image) payload.image = await uploadImage(payload.image, "Blog");
 
     const result = await prisma.blog.create({ data: payload });
     return result;
@@ -39,11 +35,7 @@ const getSingleBlog = async (id: string) => {
     return result;
 };
 const updateBlog = async (payload: Partial<Blog>, id: string) => {
-    if (payload.image) {
-        const result = await cloudinary.v2.uploader.upload(payload.image, { folder: "PhoneCareHub/Blog" });
-        if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to update image");
-        payload.image = result.secure_url;
-    }
+    if (payload.image) payload.image = await uploadImage(payload.image, "Blog");
 
     const result = await prisma.blog.update({ where: { id }, data: payload });
     return result;

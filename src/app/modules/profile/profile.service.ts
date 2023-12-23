@@ -1,10 +1,10 @@
 import { Admin, User } from "@prisma/client";
 import { hash } from "bcrypt";
-import cloudinary from "cloudinary";
 import httpStatus from "http-status";
 import { JWTPayload } from "jose";
 import ApiError from "../../../errors/ApiError";
 import { exclude } from "../../../helpers/exclude";
+import uploadImage from "../../../helpers/uploadImage";
 import prisma from "../../../shared/prisma";
 
 const getUserProfile = async (jwtPayload: JWTPayload | null) => {
@@ -21,12 +21,7 @@ const getUserProfile = async (jwtPayload: JWTPayload | null) => {
 };
 
 const updateProfile = async (payload: User | Admin, jwtPayload: JWTPayload | null) => {
-    if (payload.image) {
-        const result = await cloudinary.v2.uploader.upload(payload.image, { folder: "PhoneCareHub/Profile" });
-        if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Failed to update image");
-        payload.image = result.secure_url;
-    }
-
+    if (payload.image) payload.image = await uploadImage(payload.image, "Profile");
     if (payload.password) payload.password = await hash(payload.password, 12);
 
     let user;
