@@ -1,15 +1,19 @@
 {
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true,
-        "source.fixAll.tslint": true,
-        "source.organizeImports": true
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.tslint": "explicit",
+        "source.organizeImports": "explicit"
     },
     "files.exclude": {
+        ".yarn": true,
         "node_modules": true,
         ".eslintignore": true,
         ".eslintrc": true,
         ".gitignore": true,
         ".prettierrc": true,
+        ".yarnrc.yml": true,
+        "Dockerfile": true,
+        "entrypoint.sh": true,
         "tsconfig.json": true,
         "yarn.lock": true
     }
