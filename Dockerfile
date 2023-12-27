@@ -1,9 +1,10 @@
-FROM node:alpine
+FROM node:20.10.0-alpine
 WORKDIR /phonecarehub
+COPY pnpm-lock.yaml package.json ./
+RUN npm install -g pnpm
+RUN pnpm install
 COPY . .
-RUN yarn install
-COPY .env .env
-RUN yarn build
+RUN pnpm generate
+RUN pnpm build
 EXPOSE 5000
-RUN ["chmod", "+x", "./entrypoint.sh"]
-ENTRYPOINT [ "sh", "./entrypoint.sh" ]
+CMD ["pnpm", "start"]

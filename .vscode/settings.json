@@ -5,16 +5,13 @@
         "source.organizeImports": "explicit"
     },
     "files.exclude": {
-        ".yarn": true,
         "node_modules": true,
+        ".dockerignore": true,
         ".eslintignore": true,
         ".eslintrc": true,
         ".gitignore": true,
         ".prettierrc": true,
-        ".yarnrc.yml": true,
-        "Dockerfile": true,
-        "entrypoint.sh": true,
-        "tsconfig.json": true,
-        "yarn.lock": true
+        "pnpm-lock.yaml": true,
+        "tsconfig.json": true
     }
 }
