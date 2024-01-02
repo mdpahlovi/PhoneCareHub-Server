@@ -27,6 +27,7 @@
         "http-status": "1.7.3",
         "jose": "^5.2.0",
         "prisma": "5.7.1",
+        "stripe": "^14.10.0",
         "typescript": "^5.3.3",
         "zod": "3.22.4"
     },
